@@ -1,0 +1,17 @@
+@import './test.scss';
+@import '../../../static/style/libs/_export.scss';
+@import './base/_export.scss';
+@import './page/_export.scss';
+
+
+.wrap {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: url('../bg.jpg') no-repeat fixed center;
+    background-size: cover;
+    display: block;
+    padding-top: 30%;
+  }

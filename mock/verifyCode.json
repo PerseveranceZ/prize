@@ -1,0 +1,11 @@
+{
+  "resCode": 0,
+  "msg": "success",
+  "resData": {
+    "inviteCode": 123, 
+    "name": "haha",
+    "phone": 18888888888,
+    "store" : "store",
+    "pmodel": "p9"
+  }
+}

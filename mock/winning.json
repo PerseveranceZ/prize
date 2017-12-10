@@ -1,0 +1,14 @@
+{
+    "resCode": 0,
+    "msg": "success",
+    "resData": [{
+        "name": "haha",
+        "phone": 18888888888,
+        "prizeNo": "1"
+    },
+    {
+        "name": "haha",
+        "phone": 18888888888,
+        "prizeNo": "2"
+    }]
+  }
