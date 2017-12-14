@@ -31,8 +31,8 @@ _ajaxInstance.interceptors.request.use((config) => {
 // response 拦截器
 _ajaxInstance.interceptors.response.use((response) => {
     DEBUG.res && console.info(response.config.url, ' response:', response)
-        //resCode全局处理
-    if (response.data.resCode === 0) return response.data.resData;
+        //code全局处理
+    if (response.data.code === 0) return response.data.data;
 
     !!response.config.noShowDefaultError || GLOBAL.vbus.$emit('ajax_handle_error', response)
     return Promise.reject(response)

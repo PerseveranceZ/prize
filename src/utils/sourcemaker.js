@@ -43,7 +43,7 @@ export default class SourceMaker {
                 apiDesc = api.desc,
                 apiMap = this._apiMap,
                 apiParams = api.params,
-                apiBaseURL = LOCAL_AJAX ? '' : TESTPATH,
+                apiBaseURL = LOCAL_AJAX ? '' : TEST_PATH,
                 apiMethod = LOCAL_AJAX ? 'get' : api.method,
                 apiUrl = LOCAL_AJAX ? api.localPath : api.path
 

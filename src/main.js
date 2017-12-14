@@ -12,7 +12,7 @@ import 'Directives' // 指令
 // Webpack CSS import
 // import 'onsenui/css/onsenui.css'
 // import 'onsenui/css/onsen-css-components.css'
-
+import 'bulma/bulma.sass'
 //插件
 // import VueOnsen from 'vue-onsenui'
 import injector from 'Config/inject'
@@ -40,3 +40,5 @@ new Vue({
     template: '<App/>',
     components: { App }
 })
+
+if (process.env.NODE_ENV === 'development') require('vconsole')

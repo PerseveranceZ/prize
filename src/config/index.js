@@ -1,5 +1,5 @@
 // 接口拦截到需要跳转登录页面的 code
-export const TEST_PATH = ''
+export const TEST_PATH = 'http://api.dongni.us/'
 
 // 接口拦截到需要跳转登录页面的 code
 export const LOGIN_CODE = 1204
@@ -8,7 +8,7 @@ export const LOGIN_CODE = 1204
 export const ABORT_TIME = 20
 
 // 请求本地ajax
-export const LOCAL_AJAX = true
+export const LOCAL_AJAX = false
 
 /**
  * 开启项目调试

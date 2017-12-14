@@ -1,28 +1,40 @@
 <template>
-  <div class="wrap">
+  <div>
     <div class="prizeBox">
-      <div class="prize-item prize" :class="selectedIndex === 0 ? 'prize-select' : ''">
-        <div>
-          {{PRIZES[0]}}
-        </div>
+      <div ref="prize_1" class="prize-item prize" :class="{'prize-select': selectedIndex === 1}">
+        <i class="iconfont">&#xe628;</i>
+        <p>{{PRIZES[0]}}</p>
       </div>
-      <div class="prize-item" :class="selectedIndex === 1 ? 'prize-select' : ''">{{PRIZES[1]}}</div>
-      <div class="prize-item" :class="selectedIndex === 2 ? 'prize-select' : ''">{{PRIZES[2]}}</div>
+      <div ref="prize_2" class="prize-item" :class="{'prize-select': selectedIndex === 2}">
+        <i class="iconfont">&#xe603;</i>
+        <p>{{PRIZES[1]}}</p>
+    </div>
+      <div ref="prize_3" class="prize-item" :class="{'prize-select': selectedIndex === 3}">
+        <i class="iconfont">&#xe645;</i>
+        <p>{{PRIZES[2]}}</p>
+    </div>
     </div>
     <div class="prizeBox">
-      <div class="prize-item" :class="selectedIndex === 3 ? 'prize-select' : ''">{{PRIZES[3]}}</div>
-      <div class="prize-item prize-button" @click="luckDraw">开始<br/>抽奖</div>
-      <div class="prize-item" :class="selectedIndex === 5 ? 'prize-select' : ''">{{PRIZES[5]}}</div>
+      <div ref="prize_4" class="prize-item" :class="{'prize-select': selectedIndex === 4}"><i class="iconfont">&#xe636;</i><p>{{PRIZES[3]}}</p></div>
+      <div class="prize-item prize-button" @click="openPrize">
+        <i class="iconfont">&#xe677;</i>
+        <p>开始抽奖</p>
+      </div>
+        <!-- <div class="prize-item prize-button" @click="luckDraw">
+          <i class="iconfont">&#xe666;</i>
+          <p>已结束</p>
+        </div>     -->  
+      <div ref="prize_5" class="prize-item" :class="{'prize-select': selectedIndex === 5}"><i class="iconfont">&#xe65e;</i><p>{{PRIZES[5]}}</p></div>
     </div>
     <div class="prizeBox">
-      <div class="prize-item" :class="selectedIndex === 6 ? 'prize-select' : ''">{{PRIZES[6]}}</div>
-      <div class="prize-item" :class="selectedIndex === 7 ? 'prize-select' : ''">{{PRIZES[7]}}</div>
-      <div class="prize-item" :class="selectedIndex === 8 ? 'prize-select' : ''">{{PRIZES[8]}}</div>
+      <div ref="prize_6" class="prize-item" :class="{'prize-select': selectedIndex === 6}"><i class="iconfont">&#xe60c;</i><p>{{PRIZES[6]}}</p></div>
+      <div ref="prize_7" class="prize-item" :class="{'prize-select': selectedIndex === 7}"><i class="iconfont">&#xe61d;</i><p>{{PRIZES[7]}}</p></div>
+      <div ref="prize_8" class="prize-item" :class="{'prize-select': selectedIndex === 8}"><i class="iconfont">&#xe605;</i><p>{{PRIZES[8]}}</p></div>
     </div>
   
     <div class="page" v-if="havePirzeList.length">
-      <ul class="box prizeList">
-        <li v-for="(item, index) in havePirzeList" :key="index">{{item}}</li>
+      <ul class="prizeList">
+        <li v-for="(item, index) in havePirzeList" :key="index">{{`${item.user_phone}-${item.user_name}-${item.prize_name}`}}</li>
       </ul>
     </div>
   </div>
@@ -30,41 +42,30 @@
 
 <script>
   import {PRIZES} from './conf'
-  const prizeIndexs = [0, 1, 2, 5, 8, 7, 6, 3]
+  const prizeIndexs = [1, 1, 2, 3, 5, 8, 7, 6, 4]
   
   export default {
     created() {
       this.code = this.$route.query.code
       this.$apis['code/check']({
-        code
+        code: this.code
       }).then(res => {
-        // code 没被抽 + 有效
         let {
-          prizeNo,
-          name,
-          phone
+          prize_no,
+          user_name,
+          user_phone,
+          status
         } = res
-  
-        this.prizeNo = prizeNo
-        this.name = name
-        this.phone = phone
-        this.getHavePirzeList()
-      }, err => {
-        if (err.resCode === 1) {
-          // 已经抽过
-          this.$router.push({
-            name: 'fourth'
-          })
+
+        this.prizeNo = parseInt(prize_no, 10) || 1
+        this.name = user_name
+        this.phone = user_phone
+        if( status == 1 ) {
+          this.gotoFourth()
+        }else{
+          this.canOpenPrize = true
+          this.getHavePirzeList()
         }
-        if (err.resCode === 2 || err.resCode === 3) {
-          // 无效
-          // 没抽+无效
-          this.$router.push({
-            name: 'lose'
-          })
-  
-        }
-  
       })
     },
     data() {
@@ -76,41 +77,61 @@
         currIndex: 0,
         selectedIndex: -1,
         havePirzeList: [],
+        canOpenPrize: false,
         PRIZES
       };
     },
     methods: {
+      openPrize() {
+        if( !this.canOpenPrize ) return
+        this.changeCodeStatus().then(resData => {
+          this.luckDraw()
+        })
+      },
       luckDraw() {
-        if (this.selectedIndex === this.prizeNo && this.currIndex > 80) {
-          this.$router.push({
-            name: 'fourth',
-            query: {
-              name: this.name,
-              phone: this.phone,
-              pirzeNo: this.prizeNo
-            }
+          if (this.selectedIndex === this.prizeNo && this.currIndex > 28) {
+          this.$nextTick(() => {
+            this.$refs[`prize_${this.prizeNo}`].className += ' animated infinite pulse'
           })
+          setTimeout(() => {
+            this.gotoFourth()           
+          }, 3000)
           return
         }
         setTimeout(() => {
           this.currIndex++
-            this.selectedIndex = prizeIndexs[this.currIndex % 8]
+          if(this.currIndex % 9 === 0) this.currIndex++
+          this.selectedIndex = prizeIndexs[this.currIndex % 9]
           this.luckDraw()
         }, this.rate)
       },
       getHavePirzeList() {
         this.$apis['code/list']({
-          count: 50
+          page: 1,
+          size: 50
         }).then(resData => {
-          this.havePirzeList = resData
-        }, err => {
-  
+          this.havePirzeList = resData.list
         })
+      },
+      changeCodeStatus() {
+        return this.$apis['code/prize']({
+          code: this.code,
+        }).then(resData => {
+          return resData
+        })        
+      },
+      gotoFourth() {
+        this.$router.push({
+          name: 'fourth',
+          query: {
+            code: this.code
+          }
+        })            
       }
     },
     computed: {
       rate() {
-        return this.currIndex / 0.2
+        return this.currIndex / 0.1
       }
     }
   }
@@ -132,10 +153,10 @@
   .prize-item {
     box-shadow: 1px 1px 10px #bd1313;
     display: inline-block;
+      padding-top: .6rem;
     height: 5rem;
     font-size: 16px;
     text-align: center;
-    line-height: 5rem;
     flex-grow: 1;
     flex-basis: 5rem;
     background: #9d0909;
@@ -153,9 +174,7 @@
   }
   
   .prize-button {
-    height: 60px;
     background: #e1c28b;
-    font-size: 24px;
     color: #fff;
     line-height: 30px;
     padding: 10px 0;
@@ -167,13 +186,18 @@
     padding: 0;
     margin-top: 2rem;
     color: #a28652;
+    background-color: transparent;
     overflow: hidden;
     flex: auto;
     align-items: center;
     flex-direction: row;
+    animation: moveup 30s linear infinite;
+    margin: 0;    
   }
   
   .prizeList li {
+    line-height: 30px;
+
     text-align: center;
     margin: 0 0 5px 0;
     font-size: 1rem;
@@ -188,27 +212,10 @@
     }
   }
   
-  .box {
-    animation: moveup 60s linear infinite;
-  }
-  
   .page {
     overflow: hidden;
-  }
-  
-  
-  /*样式*/
-  
-  .page {
-    margin-top: 3em;
     margin-bottom: 0;
   }
   
-  .box {
-    margin: 0;
-  }
   
-  .box li {
-    line-height: 30px;
-  }
 </style>

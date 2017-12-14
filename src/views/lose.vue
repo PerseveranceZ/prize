@@ -1,7 +1,7 @@
 <template>
    <div>
      <div>
-         失效页面
+         {{$route.query.code}}已失效
      </div>
    </div>
 </template>

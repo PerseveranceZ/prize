@@ -1,8 +1,26 @@
-@import './test.scss';
 @import '../../../static/style/libs/_export.scss';
-@import './base/_export.scss';
-@import './page/_export.scss';
 
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 505353 */
+  src: url('//at.alicdn.com/t/font_505353_vksvumuro9io1or.eot');
+  src: url('//at.alicdn.com/t/font_505353_vksvumuro9io1or.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_505353_vksvumuro9io1or.woff') format('woff'),
+  url('//at.alicdn.com/t/font_505353_vksvumuro9io1or.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_505353_vksvumuro9io1or.svg#iconfont') format('svg');
+}
+
+.iconfont {  
+  font-family:"iconfont" !important;  
+  font-size:1.5rem;  
+  font-style:normal;  
+  -webkit-font-smoothing: antialiased;  
+  -moz-osx-font-smoothing: grayscale;  
+}  
 
 .wrap {
     position: absolute;

@@ -3,20 +3,20 @@ export default [{
     method: 'GET',
     desc: '邀请码校验',
     localPath: '/mock/code.json',
-    path: '',
+    path: '/api/prize/verify',
     params: {
         code: '',
-        name: '',
-        phone: '',
-        store: '',
-        pmodel: ''
+        user_name: '',
+        user_phone: '',
+        shop_name: '',
+        model_type: ''
     }
 },{
     name: 'check',
     method: 'GET',
     desc: '邀请码检查',
     localPath: '/mock/code.json',
-    path: '',
+    path: '/api/prize/getdata',
     params: {
         code: ''
     }
@@ -25,17 +25,18 @@ export default [{
     method: 'GET',
     desc: '抽奖',
     localPath: '/mock/code.json',
-    path: '',
+    path: '/api/prize/setstatus',
     params: {
         code: ''
     }
 },{
     name: 'list',
     method: 'GET',
-    desc: '抽奖',
+    desc: '抽奖列表',
     localPath: '/mock/code.json',
-    path: '',
+    path: '/api/prize/getlist',
     params: {
-        count: 50
+        page: 1,
+        size: 50
     }
 }]

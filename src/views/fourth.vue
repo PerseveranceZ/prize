@@ -1,30 +1,29 @@
 <template>
     <div>
         <div>中奖成功</div>
-        <div>{{PRIZES[prizeNo]}}</div>
-        <div>{{name}}</div>
-        <div>{{phone}}</div>
+        <div>{{info}}</div>
     </div>
 </template>
 
 <script>
 import {PRIZES} from './conf'
     export default {
+        beforeRouteEnter (to, from, next) {
+            GLOBAL.vbus.$emit('handleImgNy', true)
+            GLOBAL.vbus.$emit('handleIconAnimated', false)            
+            next()
+        },        
         data() {
             return {
-                name: '',
-                phone: '',
-                prizeNo: '',
-                PRIZES
+                info: null
             }
         },
         created() {
-            this.name = this.$route.query.name
-            this.phone = this.$route.query.phone
-            this.prizeNo = this.$route.query.prizeNo
-        },
-        methods: {
-    
+            this.$apis['code/check']({
+                code: this.$route.query.code
+            }).then(info => {
+                this.info = info
+            })
         }
     }
 </script>
